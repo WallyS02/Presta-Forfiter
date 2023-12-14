@@ -87,7 +87,8 @@ def add_categories(clean):
     for category in categories:
         if "parent" in category:
             add_category(category["name"],
-                         prestashop.get("categories", options={"filter[name]": category["parent"]})["categories"]["category"]["attrs"][
+                         prestashop.get("categories", options={"filter[name]": category["parent"]})["categories"][
+                             "category"]["attrs"][
                              "id"])
         else:
             add_category(category["name"], index)
@@ -102,12 +103,12 @@ def add_features(attributes):
         if feature["product_features"]:
             feature_id = feature["product_features"]["product_feature"]["attrs"]["id"]
         else:
-            feature_schema["product_feature"]["name"]["language"]["value"] = name
+            feature_schema["product_feature"]["name"]["language"][0]["value"] = name
             feature_schema["product_feature"]["position"] = 1
             feature_id = prestashop.add("product_features", feature_schema)["prestashop"]["product_feature"]["id"]
 
         feature_option_schema["product_feature_value"]["id_feature"] = feature_id
-        feature_option_schema["product_feature_value"]["value"]["language"]["value"] = value
+        feature_option_schema["product_feature_value"]["value"]["language"][0]["value"] = value
         feature_option_schema["product_feature_value"]["custom"] = 1
         value_id = prestashop.add("product_feature_values", feature_option_schema)["prestashop"]["product_feature_value"]["id"]
         feat_ids_values[feature_id] = value_id
@@ -115,20 +116,26 @@ def add_features(attributes):
 
 
 def add_images_to_product(product_name, product_id):
-    image = os.listdir(f"{SCRIPT_DIR}\\images\\" + prepare_name(product_name) + '.jpg')[0]
-    fd = io.open(f"{SCRIPT_DIR}\\images\\" + prepare_name(product_name) + '.jpg', "rb")
-    content = fd.read()
-    fd.close()
-    prestashop.add(f"images/products/{product_id}", files=[
-        ("image", image, content)
-    ])
-    big_image = os.listdir(f"{SCRIPT_DIR}\\images\\" + prepare_name(product_name) + '-BIG.jpg')[0]
-    fd = io.open(f"{SCRIPT_DIR}\\images\\" + prepare_name(product_name) + '-BIG.jpg', "rb")
-    content = fd.read()
-    fd.close()
-    prestashop.add(f"images/products/{product_id}", files=[
-        ("image", big_image, content)
-    ])
+    try:
+        image = prepare_name(product_name) + '.jpg'
+        fd = io.open(f"{SCRIPT_DIR}\\images\\" + prepare_name(product_name) + '.jpg', "rb")
+        content = fd.read()
+        fd.close()
+        prestashop.add(f"images/products/{product_id}", files=[
+            ("image", image, content)
+        ])
+    except:
+        pass
+    try:
+        big_image = prepare_name(product_name) + '-BIG.jpg'
+        fd = io.open(f"{SCRIPT_DIR}\\images\\" + prepare_name(product_name) + '-BIG.jpg', "rb")
+        content = fd.read()
+        fd.close()
+        prestashop.add(f"images/products/{product_id}", files=[
+            ("image", big_image, content)
+        ])
+    except:
+        pass
 
 
 def change_quantity(product_id):
@@ -146,19 +153,21 @@ def add_product(product):
     semaphore.acquire()
     feature_ids = add_features(product["additional_information"])
     semaphore.release()
-    category_id = prestashop.get("categories", options={"filter[name]": product["category"]})["categories"]["category"]["attrs"]["id"]
-    product_schema["product"]["name"]["language"]["value"] = product["name"]
+    category_id = \
+        prestashop.get("categories", options={"filter[name]": product["category"]})["categories"]["category"]["attrs"][
+            "id"]
+    product_schema["product"]["name"]["language"][0]["value"] = product["name"]
     product_schema["product"]["id_category_default"] = category_id
     product_schema["product"]["id_shop_default"] = 1
-    product_schema["product"]["reference"] = product["id"]
     product_schema["product"]["id_tax_rules_group"] = 1
-    product_schema["product"]["price"] = product["price"]
+    product_schema["product"]["price"] = float(product["price"].split(' ')[0].split(',')[0]) + float(
+        product["price"].split(' ')[0].split(',')[1]) * 0.01
     product_schema["product"]["active"] = 1
     product_schema["product"]["state"] = 1
     product_schema["product"]["available_for_order"] = 1
     product_schema["product"]["minimal_quantity"] = 1
     product_schema["product"]["show_price"] = 1
-    product_schema["product"]["meta_title"]["language"]["value"] = product["name"]
+    product_schema["product"]["meta_title"]["language"][0]["value"] = product["name"]
     product_features = []
     for feature_id, value_id in feature_ids.items():
         product_features.append({
@@ -174,7 +183,7 @@ def add_product(product):
     }
 
     product_schema["product"]["weight"] = randint(1, 600) / 10
-    product_schema["product"]["description"]["language"]["value"] = product['description']
+    product_schema["product"]["description"]["language"][0]["value"] = product['description']
     product_id = prestashop.add("products", product_schema)["prestashop"]["product"]["id"]
     change_quantity(product_id)
     add_images_to_product(product["name"], product_id)
@@ -212,8 +221,8 @@ def add_products(clean):
 
 
 def main():
-    add_categories(False)
-    #add_products(True)
+    add_categories(True)
+    add_products(True)
 
 
 if __name__ == '__main__':
