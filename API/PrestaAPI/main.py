@@ -61,10 +61,10 @@ def add_category(name, parent_id):
         "filter[name]": name
     })
     if not category["categories"]:
-        category_schema["category"]["name"]["language"]["value"] = name
+        category_schema["category"]["name"]["language"][0]["value"] = name
         category_schema["category"]["id_parent"] = parent_id
         category_schema["category"]["active"] = 1
-        category_schema["category"]["description"]["language"]["value"] = f"Kategoria {name}"
+        category_schema["category"]["description"]["language"][0]["value"] = f"Kategoria {name}"
         return prestashop.add("categories", category_schema)["prestashop"]["category"]["id"]
     else:
         return category["categories"]["category"]["attrs"]["id"]
@@ -79,18 +79,18 @@ def add_categories(clean):
         if ids:
             prestashop.delete("categories", resource_ids=ids)
 
-    with open(f"{SCRIPT_DIR}\\categories.json") as file:
+    with open(f"{SCRIPT_DIR}\\categories.json", encoding='utf8') as file:
         categories = json.loads(file.read())
 
     index = 2
 
     for category in categories:
-        if category["attrs"]["parent"]:
-            add_category(category["attrs"]["name"],
-                         prestashop.get("categories", options={"filter[name]": category["attrs"]["parent"]})["attrs"][
+        if "parent" in category:
+            add_category(category["name"],
+                         prestashop.get("categories", options={"filter[name]": category["parent"]})["categories"]["category"]["attrs"][
                              "id"])
         else:
-            add_category(category["attrs"]["name"], index)
+            add_category(category["name"], index)
 
 
 def add_features(attributes):
@@ -204,7 +204,7 @@ def add_products(clean):
             if ids:
                 prestashop.delete("product_features", resource_ids=ids)
 
-    with open(f"{SCRIPT_DIR}\\products.json") as file:
+    with open(f"{SCRIPT_DIR}\\products.json", encoding='utf8') as file:
         products = json.loads(file.read())
 
     with ThreadPoolExecutor(max_workers=15) as executor:
@@ -213,7 +213,7 @@ def add_products(clean):
 
 def main():
     add_categories(False)
-    add_products(False)
+    #add_products(True)
 
 
 if __name__ == '__main__':
