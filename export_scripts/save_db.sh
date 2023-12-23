@@ -1,0 +1,1 @@
+docker exec mariadb mysqldump --password=admin prestashop_database > ./shop-src/db_dump/dump.sql

@@ -67,7 +67,16 @@ http://localhost:8080/admin4577/
    venv\Scripts\activate
 4. Run tests.
    python main.py
+
+## RUN DB DUMP
    
+Run commands in order in directory of Presta-Forfiter:
+```
+./export-scripts/save_db.sh
+```
+```
+./export-scripts/load_db.sh
+```
 
 ## AUTHORS
 
