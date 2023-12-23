@@ -7,6 +7,7 @@
 - [RUN SCRAPER](#run-scraper)
 - [RUN SHOP](#run-shop)
 - [RUN TESTS](#run-tests)
+- [RUN DB DUMP](#run-db-dump)
 - [AUTHORS](#authors)
 
 ## SOFTWARE
