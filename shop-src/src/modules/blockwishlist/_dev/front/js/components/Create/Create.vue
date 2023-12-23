@@ -140,10 +140,11 @@
   };
 </script>
 
-<style lang="scss" type="text/scss">
+<style lang="scss" type="text/scss" scoped>
   .wishlist {
     &-create {
       .wishlist-modal {
+        display: block;
         opacity: 0;
         pointer-events: none;
         z-index: 0;

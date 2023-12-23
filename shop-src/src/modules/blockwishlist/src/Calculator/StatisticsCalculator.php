@@ -182,9 +182,10 @@ class StatisticsCalculator
 
         $presenterFactory = new ProductPresenterFactory($this->context);
         $presentationSettings = $presenterFactory->getPresentationSettings();
-        $imageRetriever = new ImageRetriever($this->context->link);
         $presenter = new ProductPresenter(
-            $imageRetriever,
+            new ImageRetriever(
+                $this->context->link
+            ),
             $this->context->link,
             new PriceFormatter(),
             new ProductColorsRetriever(),
@@ -201,9 +202,6 @@ class StatisticsCalculator
             if ($key == 'embedded_attributes') {
                 $imgDetails = $value['cover'];
             }
-        }
-        if (!$imgDetails) {
-            $imgDetails = $imageRetriever->getNoPictureImage($this->context->language);
         }
 
         return $imgDetails;

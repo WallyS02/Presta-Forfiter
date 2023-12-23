@@ -26,8 +26,6 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 }
 
 use PrestaShop\Module\LinkList\DataMigration;
-use PrestaShop\Module\LinkList\Filter\BestSalesRouteFilter;
-use PrestaShop\Module\LinkList\Filter\LinkFilter;
 use PrestaShop\Module\LinkList\LegacyLinkBlockRepository;
 use PrestaShop\Module\LinkList\Model\LinkBlockLang;
 use PrestaShop\Module\LinkList\Presenter\LinkBlockPresenter;
@@ -73,7 +71,7 @@ class Ps_Linklist extends Module implements WidgetInterface
     {
         $this->name = 'ps_linklist';
         $this->author = 'PrestaShop';
-        $this->version = '5.0.5';
+        $this->version = '5.0.4';
         $this->need_instance = 0;
         $this->tab = 'front_office_features';
 
@@ -103,13 +101,7 @@ class Ps_Linklist extends Module implements WidgetInterface
         $this->templateFile = 'module:ps_linklist/views/templates/hook/linkblock.tpl';
         $this->templateFileColumn = 'module:ps_linklist/views/templates/hook/linkblock-column.tpl';
 
-        $this->linkBlockPresenter = new LinkBlockPresenter(
-            new Link(),
-            $this->context->language,
-            new LinkFilter([
-                new BestSalesRouteFilter(),
-            ])
-        );
+        $this->linkBlockPresenter = new LinkBlockPresenter(new Link(), $this->context->language);
         $this->legacyBlockRepository = new LegacyLinkBlockRepository(Db::getInstance(), $this->context->shop, $this->context->getTranslator());
     }
 
@@ -139,12 +131,10 @@ class Ps_Linklist extends Module implements WidgetInterface
         } else {
             $dataLoadedWithSuccess = $this->installFixtures();
         }
-        $dataLoadedWithSuccess = $dataLoadedWithSuccess
+
+        if ($dataLoadedWithSuccess
             && $this->registerHook('displayFooter')
-            && $this->registerHook('actionUpdateLangAfter')
-            && $this->registerHook('actionGeneralPageSave')
-        ;
-        if ($dataLoadedWithSuccess) {
+            && $this->registerHook('actionUpdateLangAfter')) {
             return true;
         }
 
@@ -234,17 +224,10 @@ class Ps_Linklist extends Module implements WidgetInterface
         }
     }
 
-    public function hookActionGeneralPageSave()
-    {
-        $this->_clearCache('');
-    }
-
     public function _clearCache($template, $cache_id = null, $compile_id = null)
     {
-        return array_sum([
-            parent::_clearCache($this->templateFile),
-            parent::_clearCache($this->templateFileColumn),
-        ]);
+        parent::_clearCache($this->templateFile);
+        parent::_clearCache($this->templateFileColumn);
     }
 
     public function getContent()

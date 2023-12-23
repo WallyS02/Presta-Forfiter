@@ -67,7 +67,7 @@ jQuery.fn.rating = function(generalOptions) {
       ratingInput = $('<input type="number" name="'+componentOptions.input+'" id="'+componentOptions.input+'" />');
       ratingInput.val(ratingValue);
       ratingInput.css('display', 'none');
-      ratingInput.on('change', displayInteractiveGrade);
+      ratingInput.change(displayInteractiveGrade);
       $ratingComponent.append(ratingInput);
       initInteractiveGrade();
     } else {
@@ -81,7 +81,7 @@ jQuery.fn.rating = function(generalOptions) {
       for (var i = minValue; i <= maxValue; ++i) {
         newStar = emptyStar.clone();
         newStar.data('grade', i);
-        newStar.on('mouseenter mouseleave', function overStar() {
+        newStar.hover(function overStar() {
           var overIndex = $('.star', fullStars).index($(this));
           $('.star', fullStars).each(function overStars() {
             $(this).removeClass('star-on');
@@ -93,14 +93,14 @@ jQuery.fn.rating = function(generalOptions) {
             }
           });
         });
-        newStar.on('click', function selectGrade() {
+        newStar.click(function selectGrade() {
           var selectedGrade = $(this).data('grade');
           ratingInput.val(selectedGrade);
         });
         fullStars.append(newStar);
       }
 
-      fullStars.on('mouseenter', function(){}).on('mouseleave', displayInteractiveGrade);
+      fullStars.hover(function(){}, displayInteractiveGrade);
       displayInteractiveGrade();
     }
 

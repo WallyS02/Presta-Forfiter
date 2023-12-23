@@ -64,10 +64,10 @@
   .wishlist {
     &-pagination {
       .previous {
-        margin-right: 1.875rem;
+        margin-right: 30px;
       }
 
-      .js-wishlist-search-link {
+      .js-search-link {
         cursor: pointer;
 
         &:not([href]):not([tabindex]):hover {

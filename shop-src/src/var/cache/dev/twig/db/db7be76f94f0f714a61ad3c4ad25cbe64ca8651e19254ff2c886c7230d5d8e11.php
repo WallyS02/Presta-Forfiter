@@ -37,17 +37,17 @@ class __TwigTemplate_5479668be4a880ea90f99807cc3651fa91f627f18615c7c39b957919887
 <div class=\"card-group\">
   ";
         // line 27
-        $this->loadTemplate("@PrestaShop/Admin/Improve/Design/Theme/Blocks/logo_configuration.html.twig", "@PrestaShop/Admin/Improve/Design/Theme/Blocks/logo_configuration.html.twig", 27, "1157528759")->display($context);
+        $this->loadTemplate("@PrestaShop/Admin/Improve/Design/Theme/Blocks/logo_configuration.html.twig", "@PrestaShop/Admin/Improve/Design/Theme/Blocks/logo_configuration.html.twig", 27, "1892338658")->display($context);
         // line 49
         echo "
   ";
         // line 50
-        $this->loadTemplate("@PrestaShop/Admin/Improve/Design/Theme/Blocks/logo_configuration.html.twig", "@PrestaShop/Admin/Improve/Design/Theme/Blocks/logo_configuration.html.twig", 50, "423652172")->display($context);
+        $this->loadTemplate("@PrestaShop/Admin/Improve/Design/Theme/Blocks/logo_configuration.html.twig", "@PrestaShop/Admin/Improve/Design/Theme/Blocks/logo_configuration.html.twig", 50, "1101238735")->display($context);
         // line 123
         echo "
   ";
         // line 124
-        $this->loadTemplate("@PrestaShop/Admin/Improve/Design/Theme/Blocks/logo_configuration.html.twig", "@PrestaShop/Admin/Improve/Design/Theme/Blocks/logo_configuration.html.twig", 124, "97571518")->display($context);
+        $this->loadTemplate("@PrestaShop/Admin/Improve/Design/Theme/Blocks/logo_configuration.html.twig", "@PrestaShop/Admin/Improve/Design/Theme/Blocks/logo_configuration.html.twig", 124, "240657873")->display($context);
         // line 154
         echo "</div>
 ";
@@ -244,7 +244,7 @@ class __TwigTemplate_5479668be4a880ea90f99807cc3651fa91f627f18615c7c39b957919887
 
 
 /* @PrestaShop/Admin/Improve/Design/Theme/Blocks/logo_configuration.html.twig */
-class __TwigTemplate_5479668be4a880ea90f99807cc3651fa91f627f18615c7c39b95791988768471___1157528759 extends \Twig\Template
+class __TwigTemplate_5479668be4a880ea90f99807cc3651fa91f627f18615c7c39b95791988768471___1892338658 extends \Twig\Template
 {
     public function __construct(Environment $env)
     {
@@ -540,7 +540,7 @@ class __TwigTemplate_5479668be4a880ea90f99807cc3651fa91f627f18615c7c39b957919887
 
 
 /* @PrestaShop/Admin/Improve/Design/Theme/Blocks/logo_configuration.html.twig */
-class __TwigTemplate_5479668be4a880ea90f99807cc3651fa91f627f18615c7c39b95791988768471___423652172 extends \Twig\Template
+class __TwigTemplate_5479668be4a880ea90f99807cc3651fa91f627f18615c7c39b95791988768471___1101238735 extends \Twig\Template
 {
     public function __construct(Environment $env)
     {
@@ -910,7 +910,7 @@ class __TwigTemplate_5479668be4a880ea90f99807cc3651fa91f627f18615c7c39b957919887
 
 
 /* @PrestaShop/Admin/Improve/Design/Theme/Blocks/logo_configuration.html.twig */
-class __TwigTemplate_5479668be4a880ea90f99807cc3651fa91f627f18615c7c39b95791988768471___97571518 extends \Twig\Template
+class __TwigTemplate_5479668be4a880ea90f99807cc3651fa91f627f18615c7c39b95791988768471___240657873 extends \Twig\Template
 {
     public function __construct(Environment $env)
     {

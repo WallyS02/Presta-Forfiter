@@ -67,7 +67,6 @@ services:
 
   # Grid Factories
   prestashop.module.blockwishlist.grid.all_time_stastistics_grid_factory:
-    public: true
     class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
     arguments:
         - '@prestashop.module.blockwishlist.grid.all_time_statistics_grid_definition_factory'
@@ -76,7 +75,6 @@ services:
         - '@prestashop.core.hook.dispatcher'
 
   prestashop.module.blockwishlist.grid.current_year_stastistics_grid_factory:
-    public: true
     class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
     arguments:
         - '@prestashop.module.blockwishlist.grid.current_year_statistics_grid_definition_factory'
@@ -85,7 +83,6 @@ services:
         - '@prestashop.core.hook.dispatcher'
 
   prestashop.module.blockwishlist.grid.current_month_stastistics_grid_factory:
-    public: true
     class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
     arguments:
         - '@prestashop.module.blockwishlist.grid.current_month_statistics_grid_definition_factory'
@@ -94,7 +91,6 @@ services:
         - '@prestashop.core.hook.dispatcher'
 
   prestashop.module.blockwishlist.grid.current_day_stastistics_grid_factory:
-    public: true
     class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
     arguments:
         - '@prestashop.module.blockwishlist.grid.current_day_statistics_grid_definition_factory'

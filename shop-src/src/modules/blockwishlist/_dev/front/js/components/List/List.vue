@@ -242,16 +242,16 @@
       margin-bottom: 0;
 
       &-empty {
-        font-size: 1.875rem;
+        font-size: 30;
         text-align: center;
-        padding: 1.875rem;
-        padding-bottom: 1.25rem;
+        padding: 30px;
+        padding-bottom: 20px;
         font-weight: bold;
         color: #000;
       }
 
       &-loader {
-        padding: 0 1.25rem;
+        padding: 0 20px;
         width: 100%;
       }
 
@@ -272,11 +272,11 @@
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 1.5rem 1.25rem;
+          padding: 24px 20px;
         }
 
         .dropdown-menu {
-          right: 1.25rem;
+          right: 20px;
           left: inherit;
           display: flex;
           flex-direction: column;
@@ -300,14 +300,14 @@
           .dropdown-menu {
             box-sizing: border-box;
             border: 1px solid #e5e5e5;
-            border-radius: 0.25rem;
+            border-radius: 4px;
             background-color: #ffffff;
-            box-shadow: 0.125rem 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.2);
             padding: 0;
             overflow: hidden;
 
             > button {
-              padding: 0.625rem 1.25rem;
+              padding: 10px 20px;
               transition: 0.2s ease-out;
               text-align: left;
 
@@ -320,19 +320,19 @@
 
         &-title {
           color: #232323;
-          font-size: 1rem;
+          font-size: 16px;
           font-weight: bold;
           letter-spacing: 0;
-          line-height: 1.375rem;
+          line-height: 22px;
           margin-bottom: 0;
 
           span {
             color: #7a7a7a;
-            font-size: 1rem;
+            font-size: 16px;
             letter-spacing: 0;
-            line-height: 1.375rem;
+            line-height: 22px;
             font-weight: normal;
-            margin-left: 0.3125rem;
+            margin-left: 5px;
           }
         }
 
