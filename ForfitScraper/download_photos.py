@@ -25,20 +25,19 @@ def prepare_name(name):
     return prepared_name.rstrip(prepared_name[-1])
 
 
-def download_photos(filename, is_big):
+def download_photos(filename):
     with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), filename), 'r', encoding='utf-8') as file:
         file_elements = json.load(file)
     for file_element in file_elements:
         prepared_name = prepare_name(file_element['name'])
-        if is_big:
-            path = os.path.join(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../scrapped_data/images'), prepared_name + '-BIG.jpg')
-            if not os.path.exists(path):
+        path = os.path.join(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../scrapped_data/images'), prepared_name + '-BIG.jpg')
+        if not os.path.exists(path):
+            if file_element['big-photo']:
                 urllib.request.urlretrieve(file_element['big-photo'], path)
-        else:
-            path = os.path.join(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../scrapped_data/images'), prepared_name + '.jpg')
-            if not os.path.exists(path):
+        path = os.path.join(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../scrapped_data/images'), prepared_name + '.jpg')
+        if not os.path.exists(path):
+            if file_element['big-photo']:
                 urllib.request.urlretrieve(file_element['photo'], path)
 
 
-download_photos('scrapped_data/products.json', False)
-download_photos('scrapped_data/details.json', True)
+download_photos('..\\scrapped_data\\products.json')

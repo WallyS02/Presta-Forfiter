@@ -38,4 +38,12 @@ services:
       ADMIN_PASSWD: admin
       PS_FOLDER_ADMIN: admin4577
       PS_FOLDER_INSTALL: install4577
+  phpmyadmin:
+     image: phpmyadmin/phpmyadmin:latest
+     restart: always
+     environment:
+       PMA_HOST: mariadb
+       MYSQL_ROOT_PASSWORD: your_root_password
+     ports:
+       - '8081:80'
 
