@@ -80,6 +80,3 @@ Run commands in order in directory of Presta-Forfiter:
 
 - Szymon Lider
 - Sebastian Kutny
-- Karina Lu
-- Maxim Besarab
-- Tomasz Lewandowski
