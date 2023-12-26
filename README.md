@@ -56,15 +56,10 @@ http://localhost:8080/admin4577/
 ```
 
 ## RUN TESTS
-1. Install Python on your machine.
-2. Move to the selenium_tests directory.
-   cd selenium_tests
-3. Install chromedriver, virtual environment and sellenium
-   pip install selenium
-   python3 -m venv venv
-   venv\Scripts\activate
-4. Run tests.
-   python main.py
+Run command in directory of tests:
+```
+python main.py
+```
 
 ## RUN DB DUMP
    
