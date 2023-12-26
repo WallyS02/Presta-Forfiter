@@ -8,6 +8,7 @@
 - [RUN SHOP](#run-shop)
 - [RUN TESTS](#run-tests)
 - [RUN DB DUMP](#run-db-dump)
+- [RUN API](#run-api)
 - [AUTHORS](#authors)
 
 ## SOFTWARE
@@ -69,6 +70,12 @@ Run commands in order in directory of Presta-Forfiter:
 ```
 ```
 ./export-scripts/load_db.sh
+```
+
+## RUN API
+Run command in directory of PrestaAPI:
+```
+python main.py
 ```
 
 ## AUTHORS
