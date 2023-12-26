@@ -2,8 +2,8 @@
 <module>
     <name>blockwishlist</name>
     <displayName><![CDATA[Lista życzeń]]></displayName>
-    <version><![CDATA[2.1.2]]></version>
-    <description><![CDATA[Allow customers to create wishlists to save their favorite products for later.]]></description>
+    <version><![CDATA[2.0.1]]></version>
+    <description><![CDATA[Dodaje blok zawierający listę życzeń klient&oacute;w.]]></description>
     <author><![CDATA[PrestaShop]]></author>
     <tab><![CDATA[front_office_features]]></tab>
     <is_configurable>1</is_configurable>
