@@ -1,0 +1,1 @@
+docker exec -i mariadb bash -c "mysql --password=admin prestashop_database < /var/lib/mysql/dump.sql"

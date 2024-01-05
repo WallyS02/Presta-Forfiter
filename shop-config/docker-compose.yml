@@ -1,0 +1,57 @@
+version: '3'
+services:
+  mariadb:
+    platform: linux/x86_64
+    container_name: mariadb
+    image: mariadb:10.5
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: prestashop_database
+      MYSQL_ROOT_PASSWORD: admin
+    volumes:
+      - ../shop-src/db_dump:/docker-entrypoint-initdb.d
+      - ../shop-src/dbdata:/var/lib/mysql
+
+  prestashop:
+    platform: linux/x86_64
+    container_name: prestashop
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+    ports:
+      - 443:443
+      # - 8080:80
+    volumes:
+      - ../shop-src/src:/var/www/html
+      - ./website.cert:/etc/ssl/certs/website.cert
+      - ./website.cert:/usr/local/share/ca-certificates/website.cert
+      - ./notEncodedPk.key:/etc/ssl/private/notEncodedPk.key
+    environment:
+      PS_DEV_MODE: 1
+      DB_SERVER: mariadb
+      DB_NAME: prestashop_database
+      DB_USER: root
+      DB_PASSWD: admin
+      PS_INSTALL_AUTO: 1
+      PS_DOMAIN: localhost:443
+      PS_LANGUAGE:	pl
+      PS_COUNTRY:	PL
+      ADMIN_MAIL: admin@presta.com
+      ADMIN_PASSWD: admin
+      PS_FOLDER_ADMIN: admin4577
+      PS_FOLDER_INSTALL: install4577
+      PS_DOMAIN_SSL: ${PS_DOMAIN_SSL:-localhost:443}
+      PS_ENABLE_SSL: 1
+      PS_SSL_ENABLED_EVERYWHERE: 1
+  phpmyadmin:
+     image: phpmyadmin/phpmyadmin:latest
+     restart: always
+     environment:
+       PMA_HOST: mariadb
+       MYSQL_ROOT_PASSWORD: your_root_password
+     ports:
+       - '8081:80'
+
