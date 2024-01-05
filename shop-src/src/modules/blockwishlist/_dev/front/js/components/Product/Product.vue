@@ -119,7 +119,7 @@
           'btn-secondary': product.customizable === '1',
           'btn-primary': product.customizable === '0'
         }"
-        :disabled="isDisabled || forceDisable"
+        :disabled="isDisabled"
         @click="
           product.add_to_cart_url || product.customizable === '1'
             ? addToCartAction()
@@ -222,35 +222,12 @@
     data() {
       return {
         prestashop,
-        forceDisable: false,
       };
     },
     computed: {
       isDisabled() {
-        const wishlistQuantity = parseInt(this.product.wishlist_quantity, 10);
-        const quantityAvailable = parseInt(this.product.quantity_available, 10);
-        const cartQuantity = parseInt(this.product.cart_quantity, 10);
-
-        if (this.product.allow_oosp) {
-          return false;
-        }
-
         if (this.product.customizable === '1') {
           return false;
-        }
-
-        if (wishlistQuantity > quantityAvailable) {
-          return true;
-        }
-
-        if (cartQuantity >= quantityAvailable) {
-          return true;
-        }
-
-        if (cartQuantity
-          && cartQuantity + wishlistQuantity > quantityAvailable
-        ) {
-          return true;
         }
 
         return !this.product.add_to_cart_url;
@@ -273,7 +250,6 @@
       async addToCartAction() {
         if (this.product.add_to_cart_url && this.product.customizable !== '1') {
           try {
-            this.forceDisable = true;
             const datas = new FormData();
             datas.append('qty', this.product.wishlist_quantity);
             datas.append('id_product', this.product.id_product);
@@ -290,8 +266,6 @@
 
             const resp = await response.json();
 
-            EventBus.$emit('refetchList');
-
             prestashop.emit('updateCart', {
               reason: {
                 idProduct: this.product.id_product,
@@ -300,10 +274,6 @@
                 linkAction: 'add-to-cart',
               },
               resp,
-            });
-
-            $('body').on('hide.bs.modal', '#blockcart-modal', () => {
-              this.forceDisable = false;
             });
 
             /* eslint-disable */
@@ -339,11 +309,11 @@
 
   .wishlist {
     &-products-item {
-      margin: 1.5625rem;
+      margin: 25px;
     }
 
     &-product {
-      max-width: 15.625rem;
+      max-width: 250px;
       width: 100%;
       position: relative;
       height: 100%;
@@ -360,22 +330,22 @@
         align-items: flex-start;
         margin-bottom: 0;
         color: #232323;
-        font-size: 0.75rem;
+        font-size: 12px;
         font-weight: bold;
         letter-spacing: 0;
-        line-height: 1.0625rem;
+        line-height: 17px;
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-        bottom: 1.0625rem;
+        bottom: 17px;
         z-index: 5;
         min-width: 80%;
         justify-content: center;
 
         i {
           color: #ff4c4c;
-          margin-right: 0.3125rem;
-          font-size: 1.125rem;
+          margin-right: 5px;
+          font-size: 18px;
         }
 
         &-responsive {
@@ -383,7 +353,7 @@
           position: inherit;
           transform: inherit;
           bottom: inherit;
-          margin-top: 0.625rem;
+          margin-top: 10px;
           left: inherit;
         }
       }
@@ -401,17 +371,17 @@
       }
 
       &-title {
-        margin-top: 0.625rem;
-        margin-bottom: 0.315rem;
+        margin-top: 10px;
+        margin-bottom: 5px;
         color: #737373;
-        font-size: 0.875rem;
+        font-size: 14px;
         letter-spacing: 0;
-        line-height: 1.875rem;
+        line-height: 19px;
       }
 
       &-image {
-        width: 15.625rem;
-        height: 15.625rem;
+        width: 250px;
+        height: 250px;
         position: relative;
         overflow: hidden;
 
@@ -428,22 +398,22 @@
 
       &-price {
         color: #232323;
-        font-size: 1rem;
+        font-size: 16px;
         font-weight: bold;
         letter-spacing: 0;
-        line-height: 1.375rem;
+        line-height: 22px;
 
         &-promo {
           text-decoration: line-through;
           color: #737373;
-          font-size: 0.875rem;
+          font-size: 14px;
           font-weight: bold;
           letter-spacing: 0;
-          line-height: 1.1875rem;
-          margin-right: 0.3125rem;
+          line-height: 19px;
+          margin-right: 5px;
           vertical-align: middle;
           display: inline-block;
-          margin-top: -0.1875rem;
+          margin-top: -3px;
         }
       }
 
@@ -463,10 +433,10 @@
 
         &-text {
           color: #7a7a7a;
-          font-size: 0.8125rem;
+          font-size: 13px;
           letter-spacing: 0;
-          line-height: 1.25rem;
-          min-height: 3.125rem;
+          line-height: 20px;
+          min-height: 50px;
           margin: 0;
         }
       }
@@ -474,7 +444,7 @@
       &-addtocart {
         width: 100%;
         text-transform: inherit;
-        padding-left: 0.625rem;
+        padding-left: 10px;
 
         &.btn-secondary {
           background-color: #dddddd;
@@ -486,7 +456,7 @@
         }
 
         i {
-          margin-top: -0.1875rem;
+          margin-top: -3px;
         }
       }
     }
@@ -494,17 +464,17 @@
     &-button {
       &-add {
         position: absolute;
-        top: 0.625rem;
-        right: 0.625rem;
+        top: 10px;
+        right: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 2.5rem;
-        width: 2.5rem;
-        min-width: 2.5rem;
-        padding-top: 0.1875rem;
+        height: 40px;
+        width: 40px;
+        min-width: 40px;
+        padding-top: 3px;
         background-color: #ffffff;
-        box-shadow: 0.125rem 0.125rem 0.25rem 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.2);
         border-radius: 50%;
         cursor: pointer;
         transition: 0.2s ease-out;
@@ -524,7 +494,7 @@
 
         i {
           color: #7a7a7a;
-          margin-top: -0.125rem;
+          margin-top: -2px;
         }
       }
     }
@@ -534,16 +504,16 @@
     .wishlist {
       &-button-add {
         position: inherit;
-        margin-left: 0.625rem;
+        margin-left: 10px;
       }
 
       &-products-item {
         width: 100%;
         margin: 0;
-        margin-bottom: 1.875rem;
+        margin-bottom: 30px;
 
         &:not(:last-child) {
-          margin-bottom: 1.875rem;
+          margin-bottom: 30px;
         }
       }
 
@@ -583,7 +553,7 @@
         &-image {
           width: 100px;
           height: 100px;
-          margin-right: 1.25rem;
+          margin-right: 20px;
           position: inherit;
 
           img {

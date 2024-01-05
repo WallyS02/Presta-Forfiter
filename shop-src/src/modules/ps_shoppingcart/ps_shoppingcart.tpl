@@ -32,12 +32,10 @@
       </ul>
       <div class="cart-subtotals">
         {foreach from=$cart.subtotals item="subtotal"}
-          {if isset($subtotal.type, $subtotal.label, $subtotal.amount)}
-            <div class="{$subtotal.type}">
-              <span class="label">{$subtotal.label}</span>
-              <span class="value">{$subtotal.amount}</span>
-            </div>
-          {/if}
+          <div class="{$subtotal.type}">
+            <span class="label">{$subtotal.label}</span>
+            <span class="value">{$subtotal.amount}</span>
+          </div>
         {/foreach}
       </div>
       <div class="cart-total">

@@ -99,17 +99,16 @@
 <style lang="scss" type="text/scss">
   .wishlist {
     &-toast {
-      padding: 0.875rem 1.25rem;
+      padding: 14px 20px;
       box-sizing: border-box;
-      width: auto;
       border: 1px solid #e5e5e5;
       border-radius: 4px;
       background-color: #ffffff;
-      box-shadow: 0.125rem 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.2);
+      box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.2);
       position: fixed;
-      right: 1.25rem;
+      right: 20px;
       z-index: 9999;
-      top: 4.375rem;
+      top: 70px;
       transition: 0.2s ease-out;
       transform: translateY(-10px);
       pointer-events: none;
@@ -141,9 +140,9 @@
 
       &-text {
         color: #232323;
-        font-size: 0.875rem;
+        font-size: 14px;
         letter-spacing: 0;
-        line-height: 1.1875rem;
+        line-height: 19px;
         margin-bottom: 0;
       }
     }

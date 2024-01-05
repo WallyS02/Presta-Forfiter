@@ -74,7 +74,7 @@
           this.productId = event.detail.productId;
         }
 
-        if (typeof event.detail.productAttributeId === 'number') {
+        if (event.detail.productAttributeId) {
           this.productAttributeId = event.detail.productAttributeId;
         }
 
@@ -86,27 +86,33 @@
   };
 </script>
 
-<style lang="scss" type="text/scss">
+<style lang="scss" type="text/scss" scoped>
   @import '@scss/_variables';
 
   .wishlist {
     &-add-to-new {
       cursor: pointer;
       transition: 0.2s ease-out;
-      font-size: 0.875rem;
+      height: 16px;
+      width: 79px;
+      font-size: 14px;
       letter-spacing: 0;
-      line-height: 1rem;
+      line-height: 16px;
+
+      &:not([href]):not([tabindex]) {
+        color: $blue;
+      }
 
       &:hover {
         opacity: 0.7;
       }
 
       i {
-        margin-right: 0.3125rem;
+        margin-right: 5px;
         vertical-align: middle;
         color: $blue;
-        margin-top: -0.125rem;
-        font-size: 1.25rem;
+        margin-top: -2px;
+        font-size: 20px;
       }
     }
 
@@ -118,7 +124,7 @@
 
         &-footer {
           text-align: left;
-          padding: 0.75rem 1.25rem;
+          padding: 12px 20px;
         }
       }
     }

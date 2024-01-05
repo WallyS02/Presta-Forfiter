@@ -8,6 +8,7 @@
 - [RUN SHOP](#run-shop)
 - [RUN TESTS](#run-tests)
 - [RUN DB DUMP](#run-db-dump)
+- [RUN API](#run-api)
 - [AUTHORS](#authors)
 
 ## SOFTWARE
@@ -56,15 +57,10 @@ http://localhost:8080/admin4577/
 ```
 
 ## RUN TESTS
-1. Install Python on your machine.
-2. Move to the selenium_tests directory.
-   cd selenium_tests
-3. Install chromedriver, virtual environment and sellenium
-   pip install selenium
-   python3 -m venv venv
-   venv\Scripts\activate
-4. Run tests.
-   python main.py
+Run command in directory of tests:
+```
+python main.py
+```
 
 ## RUN DB DUMP
    
@@ -74,6 +70,12 @@ Run commands in order in directory of Presta-Forfiter:
 ```
 ```
 ./export-scripts/load_db.sh
+```
+
+## RUN API
+Run command in directory of PrestaAPI:
+```
+python main.py
 ```
 
 ## AUTHORS

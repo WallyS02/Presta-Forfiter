@@ -137,10 +137,7 @@
        * Register to event addedToWishlist to toggle the heart if the product has been added correctly
        */
       EventBus.$on('addedToWishlist', (event) => {
-        if (
-          event.detail.productId === this.productId
-          && parseInt(event.detail.productAttributeId, 10) === this.productAttributeId
-        ) {
+        if (event.detail.productId === this.productId) {
           this.isChecked = true;
           this.idList = event.detail.listId;
         }
@@ -148,8 +145,8 @@
 
       // eslint-disable-next-line
       const items = productsAlreadyTagged.filter(
-        (e) => parseInt(e.id_product, 10) === this.productId
-          && parseInt(e.id_product_attribute, 10) === this.productAttributeId,
+        (e) => e.id_product === this.productId.toString()
+          && e.id_product_attribute === this.productAttributeId.toString(),
       );
 
       if (items.length > 0) {
@@ -169,18 +166,18 @@
             '.product-quantity input#quantity_wanted',
           );
 
-          this.productAttributeId = parseInt(args.id_product_attribute, 10);
+          this.productAttributeId = args.id_product_attribute;
 
           // eslint-disable-next-line
           const itemsFiltered = productsAlreadyTagged.filter(
-            (e) => parseInt(e.id_product, 10) === this.productId
-              && e.quantity.toString() === quantity.value
-              && parseInt(e.id_product_attribute, 10) === this.productAttributeId,
+            (e) => e.id_product === this.productId.toString()
+              && e.quantity === quantity.value
+              && e.id_product_attribute === this.productAttributeId.toString(),
           );
 
           if (itemsFiltered.length > 0) {
             this.isChecked = true;
-            this.idList = parseInt(itemsFiltered[0].id_wishlist, 10);
+            this.idList = parseInt(items[0].id_wishlist, 10);
           } else {
             this.isChecked = false;
           }
@@ -194,19 +191,19 @@
   .wishlist {
     &-button {
       &-product {
-        margin-left: 1.25rem;
+        margin-left: 20px;
       }
 
       &-add {
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 2.5rem;
-        width: 2.5rem;
-        min-width: 2.5rem;
-        padding-top: 0.1875rem;
+        height: 40px;
+        width: 40px;
+        min-width: 40px;
+        padding-top: 3px;
         background-color: #ffffff;
-        box-shadow: 0.125rem -0.125rem 0.25rem 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.2);
         border-radius: 50%;
         cursor: pointer;
         transition: 0.2s ease-out;

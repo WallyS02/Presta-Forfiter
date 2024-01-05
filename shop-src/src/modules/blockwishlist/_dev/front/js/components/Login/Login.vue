@@ -66,13 +66,18 @@
   };
 </script>
 
-<style lang="scss" type="text/scss">
+<style lang="scss" type="text/scss" scoped>
   .wishlist {
     &-login {
       .wishlist-modal {
+        display: block;
+        opacity: 0;
+        pointer-events: none;
         z-index: 0;
 
         &.show {
+          opacity: 1;
+          pointer-events: all;
           z-index: 1053;
         }
       }

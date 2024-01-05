@@ -27,6 +27,8 @@ if (!defined('_PS_VERSION_')) {
 }
 
 $autoloadPath = __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/classes/WishList.php';
+require_once __DIR__ . '/src/Database/Install.php';
 if (file_exists($autoloadPath)) {
     require_once $autoloadPath;
 }
@@ -36,15 +38,15 @@ class BlockWishList extends Module
     const HOOKS = [
         'actionAdminControllerSetMedia',
         'actionFrontControllerSetMedia',
-        'actionAttributeDelete',
-        'actionProductDelete',
-        'actionProductAttributeDelete',
-        'deleteProductAttribute',
         'displayProductActions',
         'displayCustomerAccount',
-        'displayFooter',
+        'displayHeader',
+        'displayTop',
         'displayAdminCustomers',
+        'displayProductAdditionalInfo',
+        'displayProductListFunctionalButtons',
         'displayMyAccountBlock',
+        'displayNav2',
     ];
 
     const MODULE_ADMIN_CONTROLLERS = [
@@ -72,14 +74,15 @@ class BlockWishList extends Module
     {
         $this->name = 'blockwishlist';
         $this->tab = 'front_office_features';
-        $this->version = '2.1.2';
+        $this->version = '2.0.1';
         $this->author = 'PrestaShop';
         $this->need_instance = 0;
 
         parent::__construct();
 
         $this->displayName = $this->trans('Wishlist', [], 'Modules.Blockwishlist.Admin');
-        $this->description = $this->trans('Allow customers to create wishlists to save their favorite products for later.', [], 'Modules.Blockwishlist.Admin');
+        $this->default_wishlist_name = $this->l('My wishlist');
+        $this->description = $this->trans('Adds a block containing the customer\'s wishlists.', [], 'Modules.Blockwishlist.Admin');
         $this->ps_versions_compliancy = [
             'min' => '1.7.6.0',
             'max' => _PS_VERSION_,
@@ -123,8 +126,6 @@ class BlockWishList extends Module
     public function hookActionAdminControllerSetMedia(array $params)
     {
         $this->context->controller->addCss($this->getPathUri() . 'public/backoffice.css');
-
-        $this->context->controller->addJs($this->getPathUri() . 'public/vendors.js');
     }
 
     /**
@@ -134,11 +135,31 @@ class BlockWishList extends Module
      *
      * @param array $params
      */
+
+    public function getAllProductByCustomer($id_customer, $idShop)
+    {
+        $result = Db::getInstance()->executeS('
+            SELECT  `id_product`, `id_product_attribute`, w.`id_wishlist`, wp.`quantity`
+            FROM `' . _DB_PREFIX_ . 'wishlist_product` wp
+            LEFT JOIN `' . _DB_PREFIX_ . 'wishlist` w ON (w.`id_wishlist` = wp.`id_wishlist`)
+            WHERE w.`id_customer` = ' . (int) $id_customer . '
+            AND w.id_shop = ' . (int) $idShop . '
+            AND wp.`quantity` > 0 ');
+
+        if (empty($result)) {
+            return false;
+        }
+
+        return $result;
+    }
+
     public function hookActionFrontControllerSetMedia(array $params)
     {
-        $productsTagged = true === $this->context->customer->isLogged()
-            ? WishList::getAllProductByCustomer($this->context->customer->id, $this->context->shop->id)
-            : false;
+        if (!method_exists('WishList','getAllProductByCustomer')) {
+            $productsTagged = true === $this->context->customer->isLogged() ? $this->getAllProductByCustomer($this->context->customer->id, $this->context->shop->id) : false;
+        }else {
+            $productsTagged = true === $this->context->customer->isLogged() ? WishList::getAllProductByCustomer($this->context->customer->id, $this->context->shop->id) : false;
+        }
 
         Media::addJsDef([
             'blockwishlistController' => $this->context->link->getModuleLink(
@@ -160,29 +181,13 @@ class BlockWishList extends Module
             ]
         );
 
-        $this->context->controller->registerJavascript(
-            'blockwishlistController',
-            'modules/' . $this->name . '/public/product.bundle.js',
-            [
-              'priority' => 100,
-            ]
-        );
-
-        $this->context->controller->registerJavascript(
-            'blockwishlistGraphql',
-            'modules/' . $this->name . '/public/graphql.js',
-            [
-              'priority' => 190,
-            ]
-        );
-
-        $this->context->controller->registerJavascript(
-            'blockwishlistVendors',
-            'modules/' . $this->name . '/public/vendors.js',
-            [
-              'priority' => 190,
-            ]
-        );
+       $this->context->controller->registerJavascript(
+           'blockwishlistController',
+           'modules/' . $this->name . '/public/product.bundle.js',
+           [
+             'priority' => 100,
+           ]
+       );
     }
 
     /**
@@ -202,48 +207,6 @@ class BlockWishList extends Module
         return $this->fetch('module:blockwishlist/views/templates/hook/product/add-button.tpl');
     }
 
-    public function hookActionProductDelete(array $params)
-    {
-        if (!isset($params['id_product'])) {
-            return;
-        }
-
-        WishList::removeProductFromWishlist($params['id_product']);
-        Statistics::removeProductFromStatistics($params['id_product']);
-    }
-
-    public function hookActionProductAttributeDelete(array $params)
-    {
-        if (!isset($params['id_product']) || !isset($params['id_product_attribute'])) {
-            return;
-        }
-
-        // Remove all attributes from a product
-        if (!empty($params['deleteAllAttributes'])) {
-            $this->hookActionProductDelete($params);
-
-            return;
-        }
-
-        WishList::removeProductFromWishlist($params['id_product'], $params['id_product_attribute']);
-        Statistics::removeProductFromStatistics($params['id_product'], $params['id_product_attribute']);
-    }
-
-    public function hookActionAttributeDelete(array $params)
-    {
-        if (!isset($params['id_attribute'])) {
-            return;
-        }
-
-        WishList::removeProductFromWishlist(null, $params['id_product_attribute']);
-        Statistics::removeProductFromStatistics(null, $params['id_product_attribute']);
-    }
-
-    public function hookDeleteProductAttribute(array $params)
-    {
-        $this->hookActionProductAttributeDelete($params);
-    }
-
     /**
      * This hook displays new elements on the customer account page
      *
@@ -253,6 +216,7 @@ class BlockWishList extends Module
      */
     public function hookDisplayCustomerAccount(array $params)
     {
+        
         $this->smarty->assign([
             'url' => $this->context->link->getModuleLink('blockwishlist', 'lists'),
             'wishlistsTitlePage' => Configuration::get('blockwishlist_WishlistPageName', $this->context->language->id),
@@ -296,18 +260,20 @@ class BlockWishList extends Module
     }
 
     /**
-     * This hook adds additional elements in the footer section of your pages
+     * This hook adds additional elements in the head section of your pages (head section of html)
      *
      * @param array $params
      *
      * @return string
      */
-    public function hookDisplayFooter(array $params)
+    public function hookDisplayHeader(array $params)
     {
+        $this->context->controller->addJS(($this->_path).'js/ajax-wishlist.js');
+        $this->context->controller->addCSS(($this->_path).'blockwishlist.css', 'all');
+        
         $this->smarty->assign([
             'context' => $this->context->controller->php_self,
             'url' => $this->context->link->getModuleLink('blockwishlist', 'action', ['action' => 'getAllWishlist']),
-            'deleteListUrl' => $this->context->link->getModuleLink('blockwishlist', 'action', ['action' => 'deleteWishlist']),
             'createUrl' => $this->context->link->getModuleLink('blockwishlist', 'action', ['action' => 'createNewWishlist']),
             'deleteProductUrl' => $this->context->link->getModuleLink('blockwishlist', 'action', ['action' => 'deleteProductFromWishlist']),
             'addUrl' => $this->context->link->getModuleLink('blockwishlist', 'action', ['action' => 'addProductToWishlist']),
@@ -315,5 +281,108 @@ class BlockWishList extends Module
         ]);
 
         return $this->fetch('module:blockwishlist/views/templates/hook/displayHeader.tpl');
+    }
+    public function hookDisplayTop($params)
+    {
+        $useSSL = ((isset($this->ssl) && $this->ssl && Configuration::get('PS_SSL_ENABLED')) || Tools::usingSecureMode()) ? true : false;
+        $protocol_content = ($useSSL) ? 'https://' : 'http://';
+        if ($this->context->customer->isLogged())
+        {
+            $wishlists = Wishlist::getByIdCustomer($this->context->customer->id);
+            if (empty($this->context->cookie->id_wishlist) === true ||
+                WishList::exists($this->context->cookie->id_wishlist, $this->context->customer->id) === false)
+            {
+                if (!count($wishlists))
+                    $id_wishlist = false;
+                else
+                {
+                    $id_wishlist = (int)$wishlists[0]['id_wishlist'];
+                    $this->context->cookie->id_wishlist = (int)$id_wishlist;
+                }
+            }
+            else
+                $id_wishlist = $this->context->cookie->id_wishlist;
+
+            $this->smarty->assign(
+                array(
+                    'id_wishlist' => $id_wishlist,
+                    'isLogged' => true,
+                    'wishlist_products' => ($id_wishlist == false ? false : WishList::getProductByIdCustomer($id_wishlist,
+                        $this->context->customer->id, $this->context->language->id, null, true)),
+                    'wishlists' => $wishlists,
+                    'ptoken' => Tools::getToken(false)
+                )
+            );
+        }
+        else
+            $this->smarty->assign(array('wishlist_products' => false, 'wishlists' => false));
+        $this->context->smarty->assign(
+            array(
+                'content_dir'         => $protocol_content.Tools::getHttpHost().__PS_BASE_URI__,
+                'isLogged' => $this->context->customer->logged,
+                'count_product' => (int)Db::getInstance()->getValue('SELECT count(id_wishlist_product) FROM '._DB_PREFIX_.'wishlist w, '._DB_PREFIX_.'wishlist_product wp where w.id_wishlist = wp.id_wishlist and w.id_customer='.(int)$this->context->customer->id)
+
+            )
+        );
+        return  $this->display(__FILE__, 'blockwishlist_top.tpl');
+    }
+    public function hookDisplayNav2($params)
+    {
+        $useSSL = ((isset($this->ssl) && $this->ssl && Configuration::get('PS_SSL_ENABLED')) || Tools::usingSecureMode()) ? true : false;
+        $protocol_content = ($useSSL) ? 'https://' : 'http://';
+        if ($this->context->customer->isLogged())
+        {
+            $wishlists = Wishlist::getByIdCustomer($this->context->customer->id);
+            if (empty($this->context->cookie->id_wishlist) === true ||
+                WishList::exists($this->context->cookie->id_wishlist, $this->context->customer->id) === false)
+            {
+                if (!count($wishlists))
+                    $id_wishlist = false;
+                else
+                {
+                    $id_wishlist = (int)$wishlists[0]['id_wishlist'];
+                    $this->context->cookie->id_wishlist = (int)$id_wishlist;
+                }
+            }
+            else
+                $id_wishlist = $this->context->cookie->id_wishlist;
+
+            $this->smarty->assign(
+                array(
+                    'id_wishlist' => $id_wishlist,
+                    'isLogged' => true,
+                    'wishlist_products' => ($id_wishlist == false ? false : WishList::getProductByIdCustomer($id_wishlist,
+                        $this->context->customer->id, $this->context->language->id, null, true)),
+                    'wishlists' => $wishlists,
+                    'ptoken' => Tools::getToken(false)
+                )
+            );
+        }
+        else
+            $this->smarty->assign(array('wishlist_products' => false, 'wishlists' => false));
+        $this->context->smarty->assign(
+            array(
+                'content_dir'         => $protocol_content.Tools::getHttpHost().__PS_BASE_URI__,
+                'isLogged' => $this->context->customer->logged,
+                'count_product' => (int)Db::getInstance()->getValue('SELECT count(id_wishlist_product) FROM '._DB_PREFIX_.'wishlist w, '._DB_PREFIX_.'wishlist_product wp where w.id_wishlist = wp.id_wishlist and w.id_customer='.(int)$this->context->customer->id)
+
+            )
+        );
+        return  $this->display(__FILE__, 'blockwishlist_top.tpl');
+    }
+    public function hookDisplayProductListFunctionalButtons($params)
+    {
+        //TODO : Add cache
+        if ($this->context->customer->isLogged())
+            $this->smarty->assign(array(
+                'wishlists'=> Wishlist::getByIdCustomer($this->context->customer->id),
+                'isQuickview' => (isset($params['isQuickview']) && $params['isQuickview']) ? $params['isQuickview']:''
+            ));
+        elseif(isset($params['isQuickview']) && $params['isQuickview'])
+            $this->smarty->assign(array(
+                'isQuickview' => $params['isQuickview'],
+            ));
+        $this->smarty->assign('product', $params['product']);
+        return $this->display(__FILE__, 'blockwishlist_button.tpl');
     }
 }

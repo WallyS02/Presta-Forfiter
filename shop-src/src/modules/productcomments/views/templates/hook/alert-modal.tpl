@@ -23,8 +23,8 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  *}
 
-{$icon = $icon|default:'check_circle'}
-{$modal_message = $modal_message|default:''}
+{assign var='icon' value=$icon|default:'check_circle'}
+{assign var='modal_message' value=$modal_message|default:''}
 
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function() {
@@ -39,19 +39,23 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <p class="h2">
+        <h2>
           <i class="material-icons {$icon}" data-icon="{$icon}"></i>
           {$modal_title}
-        </p>
+        </h2>
       </div>
       <div class="modal-body">
-        <div id="{$modal_id}-message">
-          {$modal_message}
+        <div class="row">
+          <div class="col-md-12  col-sm-12" id="{$modal_id}-message">
+            {$modal_message}
+          </div>
         </div>
-        <div class="post-comment-buttons">
-          <button type="button" class="btn btn-comment btn-comment-huge" data-dismiss="modal">
-            {l s='OK' d='Modules.Productcomments.Shop'}
-          </button>
+        <div class="row">
+          <div class="col-md-12  col-sm-12 post-comment-buttons">
+            <button type="button" class="btn btn-comment btn-comment-huge" data-dismiss="modal" aria-label="{l s='OK' d='Modules.Productcomments.Shop'}">
+              {l s='OK' d='Modules.Productcomments.Shop'}
+            </button>
+          </div>
         </div>
       </div>
     </div>

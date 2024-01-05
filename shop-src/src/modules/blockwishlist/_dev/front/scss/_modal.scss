@@ -1,11 +1,10 @@
 .wishlist-modal {
-  display: none;
+  display: block;
   opacity: 0;
   pointer-events: none;
   z-index: 0;
 
   &.show {
-    display: block;
     opacity: 1;
     pointer-events: all;
     z-index: 1051;
@@ -16,7 +15,7 @@
   }
 
   &.fade .modal-dialog {
-    max-width: 34.375rem;
+    max-width: 550px;
     transform: translateY(0);
   }
 
@@ -41,10 +40,10 @@
 
       h5 {
         color: #232323;
-        font-size: 1.375rem;
+        font-size: 22px;
         font-weight: bold;
         letter-spacing: 0;
-        line-height: 1.875rem;
+        line-height: 30px;
       }
 
       &::after {
@@ -54,13 +53,13 @@
 
     &-text {
       color: #232323;
-      font-size: 0.875rem;
+      font-size: 14px;
       letter-spacing: 0;
-      line-height: 1.875rem;
+      line-height: 19px;
     }
 
     &-body {
-      padding: 0.9375 1.875rem;
+      padding: 15px 30px;
 
       .form-group {
         margin-bottom: 0;
@@ -78,7 +77,8 @@
     }
 
     &-cancel {
-      margin-right: 0.625rem;
+      background: #dddddd;
+      margin-right: 10px;
 
       &:hover {
         opacity: 0.7;
@@ -86,9 +86,9 @@
     }
 
     &-footer {
-      padding: 0.75rem 1.875rem;
+      padding: 12px 30px;
       border: none;
-      padding-bottom: 1.875rem;
+      padding-bottom: 30px;
 
       .btn {
         text-transform: none;

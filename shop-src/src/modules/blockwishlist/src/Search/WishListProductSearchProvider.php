@@ -35,7 +35,6 @@ use PrestaShop\PrestaShop\Core\Product\Search\SortOrderFactory;
 use Product;
 use Shop;
 use Symfony\Component\Translation\TranslatorInterface;
-use Validate;
 use WishList;
 
 /**
@@ -168,11 +167,8 @@ class WishListProductSearchProvider implements ProductSearchProviderInterface
 
         if ('products' === $type) {
             $sortOrder = $query->getSortOrder()->toLegacyOrderBy(true);
-            $sortWay = $query->getSortOrder()->toLegacyOrderWay();
-            if (Validate::isOrderBy($sortOrder) && Validate::isOrderWay($sortWay)) {
-                $querySearch->orderBy($sortOrder . ' ' . $sortWay);
-            }
-            $querySearch->limit((int) $query->getResultsPerPage(), ((int) $query->getPage() - 1) * (int) $query->getResultsPerPage());
+            $querySearch->orderBy($sortOrder . ' ' . $query->getSortOrder()->toLegacyOrderWay());
+            $querySearch->limit(((int) $query->getPage() - 1) * (int) $query->getResultsPerPage(), (int) $query->getResultsPerPage());
             $products = $this->db->executeS($querySearch);
 
             if (empty($products)) {

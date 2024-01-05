@@ -2,7 +2,7 @@
 <module>
     <name>ps_checkpayment</name>
     <displayName><![CDATA[Czek]]></displayName>
-    <version><![CDATA[2.0.6]]></version>
+    <version><![CDATA[2.1.0]]></version>
     <description><![CDATA[Display contact details blocks to make it easy for customers to pay by check on your store.]]></description>
     <author><![CDATA[PrestaShop]]></author>
     <tab><![CDATA[payments_gateways]]></tab>

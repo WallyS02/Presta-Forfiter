@@ -19,9 +19,14 @@
 
 const path = require('path');
 const webpack = require('webpack');
-const TerserPlugin = require('terser-webpack-plugin');
+const keepLicense = require('uglify-save-license');
 
-let config = {
+const psRootDir = path.resolve(process.env.PWD, '../../../');
+const psJsDir = path.resolve(psRootDir, 'admin-dev/themes/new-theme/js');
+const psAppDir = path.resolve(psJsDir, 'app');
+const psComponentsDir = path.resolve(psJsDir, 'components');
+
+const config = {
     entry: {
         grid: [
             './js/grid',
@@ -36,18 +41,17 @@ let config = {
     },
     //devtool: 'source-map', // uncomment me to build source maps (really slow)
     resolve: {
-        extensions: ['.js', '.ts'],
+        extensions: ['.js'],
         alias: {
-          '@PSTypes': path.resolve(__dirname, '../../../admin-dev/themes/new-theme/js/types'),
-          '@components': path.resolve(__dirname, '../../../admin-dev/themes/new-theme/js/components'),
-          '@app': path.resolve(__dirname, '../../../admin-dev/themes/new-theme/js/app')
-        }
+            '@app': psAppDir,
+            '@components': psComponentsDir,
+        },
     },
     module: {
         rules: [
             {
                 test: /\.js$/,
-                include: path.resolve(__dirname, '../js'),
+                include: path.resolve(__dirname, 'js'),
                 use: [{
                     loader: 'babel-loader',
                     options: {
@@ -58,28 +62,39 @@ let config = {
                 }]
             },
             {
-              test: /\.ts?$/,
-              loader: 'ts-loader',
-              options: {
-                onlyCompileBundledFiles: true,
-              },
-              exclude: /node_modules/,
-            },
+                test: /\.js$/,
+                include: path.resolve(__dirname, '../../../admin-dev/themes/new-theme/js'),
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            ['es2015', { modules: false }]
+                        ]
+                    }
+                }]
+            }
         ]
     },
     plugins: []
 };
 
 if (process.env.NODE_ENV === 'production') {
-    config = {
-      ...config,
-      optimization: {
-        minimize: true,
-        minimizer: [
-          new TerserPlugin(),
-        ],
-      },
-    }
+    config.plugins.push(
+        new webpack.optimize.UglifyJsPlugin({
+            sourceMap: false,
+            compress: {
+                sequences: true,
+                conditionals: true,
+                booleans: true,
+                if_return: true,
+                join_vars: true,
+                drop_console: true
+            },
+            output: {
+                comments: keepLicense
+            }
+        })
+    );
 } else {
     config.plugins.push(new webpack.HotModuleReplacementPlugin());
 }
