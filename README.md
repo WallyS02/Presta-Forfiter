@@ -43,17 +43,20 @@ sudo chmod -R 777 shop-src
 
 Next, initialize the Docker container. Navigate to shop-config directory and run:
 ```
+docker-compose build
+```
+```
 docker compose up
 ```
 
 After booting the container, you can access the shop website at:
 ```
-http://localhost:8080/
+https://localhost/
 ```
 
 To make changes to the website, navigate to the admin panel and log in using the correct credentials.
 ```
-http://localhost:8080/admin4577/
+https://localhost/admin4577/
 ```
 
 ## RUN TESTS
@@ -66,10 +69,10 @@ python main.py
    
 Run commands in order in directory of Presta-Forfiter:
 ```
-./export-scripts/save_db.sh
+./export_scripts/save_db.sh
 ```
 ```
-./export-scripts/load_db.sh
+./export_scripts/load_db.sh
 ```
 
 ## RUN API
