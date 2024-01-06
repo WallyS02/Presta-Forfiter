@@ -21,6 +21,7 @@ services:
     restart: unless-stopped
     depends_on:
       - mariadb
+      - memcached
     ports:
       - 443:443
       # - 8080:80
@@ -46,12 +47,21 @@ services:
       PS_DOMAIN_SSL: ${PS_DOMAIN_SSL:-localhost:443}
       PS_ENABLE_SSL: 1
       PS_SSL_ENABLED_EVERYWHERE: 1
+
   phpmyadmin:
      image: phpmyadmin/phpmyadmin:latest
-     restart: always
+     container_name: phpmyadmin
+     restart: unless-stopped
      environment:
        PMA_HOST: mariadb
        MYSQL_ROOT_PASSWORD: your_root_password
      ports:
        - '8081:80'
+
+  memcached:
+    image: memcached:1.6.10
+    container_name: memcached
+    restart: unless-stopped
+    ports:
+      - 11211:11211
 

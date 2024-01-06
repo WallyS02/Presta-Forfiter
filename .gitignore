@@ -1,4 +1,4 @@
-/shop-src/src/var/cache/dev/*
+/shop-src/src/var/cache/
 /shop-src/src/img/p/1/*
 /shop-src/src/img/p/2/*
 /shop-src/src/img/p/3/*
@@ -9,3 +9,12 @@
 /shop-src/src/img/p/8/*
 /shop-src/src/img/p/9/*
 /shop-src/src/var/logs/dev.log
+.idea/csv-editor.xml
+.idea/sonarlint/
+API/PrestaAPI/.idea/
+ForfitScraper/.idea/sonarlint/
+ForfitScraper/.idea/workspace.xml
+ForfitScraper/ForfitScraper/__pycache__/
+ForfitScraper/ForfitScraper/spiders/__pycache__/
+scrapped_data/.idea/
+tests/.idea/
