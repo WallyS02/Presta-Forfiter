@@ -114,9 +114,9 @@ def download_VAT_invoice(driver_admin, driver):
 
 def main():
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    driver.get("http://localhost:8080")
+    driver.get("https://localhost:443")
     driver_admin = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    driver_admin.get('http://localhost:8080/admin4577')
+    driver_admin.get('https://localhost:443/admin4577')
     add_ten_products_to_cart(driver)
     search_by_name_and_add_random_to_cart(driver)
     remove_three_products_from_cart(driver)
