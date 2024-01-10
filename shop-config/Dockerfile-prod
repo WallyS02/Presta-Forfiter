@@ -1,8 +1,8 @@
 FROM prestashop/prestashop:1.7.8
 
-COPY website.cert:/etc/ssl/certs/website.cert
-COPY website.cert:/usr/local/share/ca-certificates/website.cert
-COPY notEncodedPk.key:/etc/ssl/private/notEncodedPk.key
+COPY website.cert /etc/ssl/certs/website.cert
+COPY website.cert /usr/local/share/ca-certificates/website.cert
+COPY notEncodedPk.key /etc/ssl/private/notEncodedPk.key
 
 COPY ./ssl.conf /etc/apache2/sites-available/ssl.conf
 
