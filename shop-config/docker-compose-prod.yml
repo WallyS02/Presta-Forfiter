@@ -7,7 +7,7 @@ services:
     depends_on:
       - memcached
     ports:
-      - 18858:443
+      - 18885:443
     deploy:
       restart_policy:
         condition: on-failure
