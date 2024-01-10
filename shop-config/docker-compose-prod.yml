@@ -1,0 +1,70 @@
+version: '3'
+services:
+  prestashop:
+    image: wallys02/presta-forfiter:latest
+    user: root
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+      - memcached
+    ports:
+      - 188586:443
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 2
+        window: 70s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    #volumes:
+    #  - ../shop-src/src:/var/www/html
+    #  - ./website.cert:/etc/ssl/certs/website.cert
+    #  - ./website.cert:/usr/local/share/ca-certificates/website.cert
+    #  - ./notEncodedPk.key:/etc/ssl/private/notEncodedPk.key
+    environment:
+      PS_DEV_MODE: 1
+      DB_SERVER: db
+      DB_NAME: BE_188586
+      DB_USER: root
+      DB_PASSWD: student
+      PS_INSTALL_AUTO: 1
+      #PS_DOMAIN: localhost:443
+      PS_LANGUAGE:	pl
+      PS_COUNTRY:	PL
+      ADMIN_MAIL: admin@presta.com
+      ADMIN_PASSWD: admin
+      PS_FOLDER_ADMIN: admin4577
+      PS_FOLDER_INSTALL: install4577
+      #PS_DOMAIN_SSL: ${PS_DOMAIN_SSL:-localhost:443}
+      PS_ENABLE_SSL: 1
+      PS_SSL_ENABLED_EVERYWHERE: 1
+    networks:
+      - prestashop-memcached
+      - admin-mysql_default
+    entrypoint: /init.sh
+
+  memcached:
+    image: memcached
+    container_name: memcached
+    user: 1000:1000
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 2
+        window: 140s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+    networks:
+      - prestashop-memcached
+
+  networks:
+    prestashop-memcached:
+    admin-mysql_default:
+      external: true
+
