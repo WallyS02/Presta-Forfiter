@@ -2,10 +2,9 @@ version: '3'
 services:
   prestashop:
     image: wallys02/presta-forfiter:latest
+    container_name: BE_188586_prestashop
     user: root
-    restart: unless-stopped
     depends_on:
-      - mariadb
       - memcached
     ports:
       - 188586:443
@@ -42,13 +41,13 @@ services:
       PS_ENABLE_SSL: 1
       PS_SSL_ENABLED_EVERYWHERE: 1
     networks:
-      - prestashop-memcached
+      - BE_188586-prestashop-memcached
       - admin-mysql_default
     entrypoint: /init.sh
 
   memcached:
     image: memcached
-    container_name: memcached
+    container_name: BE_188586_memcached
     user: 1000:1000
     deploy:
       restart_policy:
@@ -61,10 +60,10 @@ services:
           cpus: '0.5'
           memory: 256M
     networks:
-      - prestashop-memcached
+      - BE_188586-prestashop-memcached
 
   networks:
-    prestashop-memcached:
+    BE_188586-prestashop-memcached:
     admin-mysql_default:
       external: true
 
