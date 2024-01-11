@@ -23,3 +23,5 @@ RUN apt-get update && \
     docker-php-ext-enable memcached
 
 RUN update-ca-certificates && a2enmod ssl && a2ensite ssl && a2enmod rewrite
+
+CMD ["./init.sh"]
