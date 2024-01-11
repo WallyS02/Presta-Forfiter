@@ -1,14 +1,9 @@
-IMAGE_NAME="wallys02/presta-forfiter:0.0.2"
+IMAGE_NAME="wallys02/presta-forfiter:latest"
 COMPOSE_URL="https://raw.githubusercontent.com/WallyS02/Presta-Forfiter/master/shop-config/docker-compose-prod.yml"
-INIT_URL="https://raw.githubusercontent.com/WallyS02/Presta-Forfiter/master/shop-config/init.sh"
 STACK_NAME="BE_188586"
 
 docker pull $IMAGE_NAME
 
 wget $COMPOSE_URL -O docker-compose-prod.yml
-
-wget $INIT_URL
-
-chmod 777 init.sh
 
 docker stack deploy -c docker-compose-prod.yml $STACK_NAME --with-registry-auth
