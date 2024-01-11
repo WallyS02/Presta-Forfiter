@@ -1,4 +1,3 @@
-version: '3'
 services:
   prestashop:
     image: wallys02/presta-forfiter:latest
@@ -31,8 +30,8 @@ services:
       DB_PASSWD: student
       PS_INSTALL_AUTO: 1
       #PS_DOMAIN: localhost:443
-      PS_LANGUAGE:	pl
-      PS_COUNTRY:	PL
+      PS_LANGUAGE:      pl
+      PS_COUNTRY:       PL
       ADMIN_MAIL: admin@presta.com
       ADMIN_PASSWD: admin
       PS_FOLDER_ADMIN: admin4577
@@ -41,7 +40,6 @@ services:
       PS_ENABLE_SSL: 1
       PS_SSL_ENABLED_EVERYWHERE: 1
     networks:
-      - BE_188586-prestashop-memcached
       - admin-mysql_default
     entrypoint: /init.sh
 
@@ -60,10 +58,8 @@ services:
           cpus: '0.5'
           memory: 256M
     networks:
-      - BE_188586-prestashop-memcached
+      - admin-mysql_default
 
-  networks:
-    BE_188586-prestashop-memcached:
-    admin-mysql_default:
-      external: true
-
+networks:
+  admin-mysql_default:
+    external: true
