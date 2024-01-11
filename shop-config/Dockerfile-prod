@@ -1,7 +1,7 @@
 FROM prestashop/prestashop:1.7.8
 
-COPY init.sh /init.sh
-COPY dump.sql /dump.sql
+COPY ./init.sh /init.sh
+COPY ./dump.sql /dump.sql
 
 RUN rm -rf /var/www/html/*
 COPY src /var/www/html
