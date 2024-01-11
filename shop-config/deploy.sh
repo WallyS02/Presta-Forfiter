@@ -1,4 +1,4 @@
-IMAGE_NAME="wallys02/presta-forfiter:latest"
+IMAGE_NAME="wallys02/presta-forfiter:0.0.2"
 COMPOSE_URL="https://raw.githubusercontent.com/WallyS02/Presta-Forfiter/master/shop-config/docker-compose-prod.yml"
 INIT_URL="https://raw.githubusercontent.com/WallyS02/Presta-Forfiter/master/shop-config/init.sh"
 STACK_NAME="BE_188586"
