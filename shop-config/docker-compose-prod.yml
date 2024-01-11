@@ -41,7 +41,7 @@ services:
       PS_SSL_ENABLED_EVERYWHERE: 1
     networks:
       - admin-mysql_default
-    #entrypoint: /init.sh
+    entrypoint: /init.sh
 
   memcached:
     image: memcached
