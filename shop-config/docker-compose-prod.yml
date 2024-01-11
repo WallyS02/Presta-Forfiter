@@ -1,6 +1,6 @@
 services:
   prestashop:
-    image: wallys02/presta-forfiter:latest
+    image: wallys02/presta-forfiter:0.0.2
     container_name: BE_188586_prestashop
     user: root
     depends_on:
