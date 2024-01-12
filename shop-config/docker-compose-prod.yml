@@ -17,11 +17,6 @@ services:
         limits:
           cpus: '0.5'
           memory: 512M
-    #volumes:
-    #  - ../shop-src/src:/var/www/html
-    #  - ./website.cert:/etc/ssl/certs/website.cert
-    #  - ./website.cert:/usr/local/share/ca-certificates/website.cert
-    #  - ./notEncodedPk.key:/etc/ssl/private/notEncodedPk.key
     environment:
       PS_DEV_MODE: 1
       DB_SERVER: db
@@ -29,19 +24,18 @@ services:
       DB_USER: root
       DB_PASSWD: student
       PS_INSTALL_AUTO: 1
-      #PS_DOMAIN: localhost:443
+      PS_DOMAIN: localhost:18885
       PS_LANGUAGE:      pl
       PS_COUNTRY:       PL
       ADMIN_MAIL: admin@presta.com
       ADMIN_PASSWD: admin
       PS_FOLDER_ADMIN: admin4577
       PS_FOLDER_INSTALL: install4577
-      #PS_DOMAIN_SSL: ${PS_DOMAIN_SSL:-localhost:443}
+      PS_DOMAIN_SSL: ${PS_DOMAIN_SSL:-localhost:18885}
       PS_ENABLE_SSL: 1
       PS_SSL_ENABLED_EVERYWHERE: 1
     networks:
       - admin-mysql_default
-    #entrypoint: /init.sh
 
   memcached:
     image: memcached
