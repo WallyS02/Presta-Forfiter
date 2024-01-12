@@ -1,14 +1,14 @@
 FROM prestashop/prestashop:1.7.8
 
 RUN rm -rf /var/www/html/*
-COPY src /var/www/html
+COPY ./src /var/www/html
 
 COPY ./init.sh /var/www/html/init.sh
 COPY ./dump.sql /var/www/html/dump.sql
 
-COPY website.cert /etc/ssl/certs/website.cert
-COPY website.cert /usr/local/share/ca-certificates/website.cert
-COPY notEncodedPk.key /etc/ssl/private/notEncodedPk.key
+COPY ./website.cert /etc/ssl/certs/website.cert
+COPY ./website.cert /usr/local/share/ca-certificates/website.cert
+COPY ./notEncodedPk.key /etc/ssl/private/notEncodedPk.key
 COPY ./ssl.conf /etc/apache2/sites-available/ssl.conf
 
 RUN chmod 777 /var/www/html/init.sh && \
