@@ -1,6 +1,5 @@
 services:
   prestashop:
-    platform: linux/x86_64
     image: wallys02/presta-forfiter:latest
     user: root
     container_name: BE_188586_prestashop
