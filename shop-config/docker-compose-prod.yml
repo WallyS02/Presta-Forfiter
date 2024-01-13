@@ -1,0 +1,60 @@
+services:
+  prestashop:
+    image: wallys02/presta-forfiter:latest
+    user: root
+    container_name: BE_188586_prestashop
+    restart: unless-stopped
+    depends_on:
+      - memcached
+    ports:
+      - 18885:443
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 2
+        window: 70s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    environment:
+      PS_DEV_MODE: 1
+      DB_SERVER: db
+      DB_NAME: BE_188586
+      DB_USER: root
+      DB_PASSWD: student
+      PS_INSTALL_AUTO: 1
+      PS_DOMAIN: localhost:18885
+      PS_LANGUAGE:      pl
+      PS_COUNTRY:       PL
+      ADMIN_MAIL: admin@presta.com
+      ADMIN_PASSWD: admin
+      PS_FOLDER_ADMIN: admin4577
+      PS_FOLDER_INSTALL: install4577
+      PS_DOMAIN_SSL: ${PS_DOMAIN_SSL:-localhost:18885}
+      PS_ENABLE_SSL: 1
+      PS_SSL_ENABLED_EVERYWHERE: 1
+    networks:
+      - admin-mysql_default
+
+  memcached:
+    image: memcached
+    container_name: BE_188586_memcached
+    user: 1000:1000
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 2
+        window: 140s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+    networks:
+      - admin-mysql_default
+
+networks:
+  admin-mysql_default:
+    external: true
