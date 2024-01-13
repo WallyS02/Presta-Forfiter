@@ -12,12 +12,12 @@ mysql -h"$MYSQL_HOST" -P"$MYSQL_PORT" -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "CR
 
 mysql -h"$MYSQL_HOST" -P"$MYSQL_PORT" -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" < "$SQL_DUMP_FILE"
 
-if [ -d "install" ]; then
-    rm -rf install
-fi
+#if [ -d "install" ]; then
+#    rm -rf install
+#fi
 
-if [ -d "config" ]; then
-    rm -rf config
-fi
+#if [ -d "config" ]; then
+#    rm -rf config
+#fi
 
 exec apache2-foreground

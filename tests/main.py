@@ -7,10 +7,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 
 
-LOCAL_SHOP = "https://localhost:443"
-CLUSTER_SHOP = "https://localhost:5242"
-LOCAL_SHOP_ADMIN = "https://localhost:443/admin4577"
-CLUSTER_SHOP_ADMIN = "https://localhost:5242/admin4577"
+SHOP = "https://localhost:18885"
+SHOP_ADMIN = "https://localhost:18885/admin4577"
 
 
 def set_quantity(driver):
@@ -36,7 +34,7 @@ def add_products_from_category_to_cart(driver, category, different_products_numb
         quantity_available = False
         while not quantity_available:
             set_quantity(driver)
-            time.sleep(1.5)
+            time.sleep(3)
             try:
                 driver.find_element(By.CLASS_NAME, 'material-icons.product-unavailable')
             except:
@@ -47,8 +45,8 @@ def add_products_from_category_to_cart(driver, category, different_products_numb
 
 
 def add_ten_products_to_cart(driver):
-    add_products_from_category_to_cart(driver, 'category-635')
-    add_products_from_category_to_cart(driver, 'category-636')
+    add_products_from_category_to_cart(driver, 'category-494')
+    add_products_from_category_to_cart(driver, 'category-495')
 
 
 def search_by_name_and_add_random_to_cart(driver):
@@ -89,7 +87,10 @@ def complete_order(driver):
     driver.find_element(By.ID, 'field-postcode').send_keys('69-666')
     driver.find_element(By.ID, 'field-city').send_keys('Boozetown')
     driver.find_element(By.NAME, 'confirm-addresses').click()
-    driver.find_element(By.ID, 'delivery_option_8').click()
+    try:
+        driver.find_element(By.ID, 'delivery_option_8').click()
+    except:
+        pass
     driver.find_element(By.NAME, 'confirmDeliveryOption').click()
     driver.find_element(By.ID, 'payment-option-1').click()
     driver.find_element(By.ID, 'conditions_to_approve[terms-and-conditions]').click()
@@ -120,9 +121,13 @@ def download_VAT_invoice(driver_admin, driver):
 
 def main():
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    driver.get(CLUSTER_SHOP)
+    driver.get(SHOP)
+    driver.find_element(By.ID, 'details-button').click()
+    driver.find_element(By.ID, 'proceed-link').click()
     driver_admin = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    driver_admin.get(CLUSTER_SHOP_ADMIN)
+    driver_admin.get(SHOP_ADMIN)
+    driver_admin.find_element(By.ID, 'details-button').click()
+    driver_admin.find_element(By.ID, 'proceed-link').click()
     add_ten_products_to_cart(driver)
     search_by_name_and_add_random_to_cart(driver)
     remove_three_products_from_cart(driver)

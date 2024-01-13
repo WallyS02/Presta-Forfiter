@@ -9,6 +9,7 @@
 - [RUN TESTS](#run-tests)
 - [RUN DB DUMP](#run-db-dump)
 - [RUN API](#run-api)
+- [RUN ON CLUSTER](#run-on-cluster)
 - [AUTHORS](#authors)
 
 ## SOFTWARE
@@ -79,6 +80,12 @@ Run commands in order in directory of Presta-Forfiter:
 Run command in directory of PrestaAPI:
 ```
 python main.py
+```
+
+## RUN ON CLUSTER
+Run command in WSL with ETI VPN on:
+```
+ssh -L 18885:student-swarm01.maas:18885 rsww@172.20.83.101
 ```
 
 ## AUTHORS
